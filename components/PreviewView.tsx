@@ -45,6 +45,7 @@ export default function PreviewView() {
     success: boolean
     message: string
   } | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const blogContent = results?.blog || ''
   const xContent = results?.x || ''
@@ -111,8 +112,31 @@ export default function PreviewView() {
       case 'blog':
         return (
           <div className="space-y-4">
-            {/* Toggle */}
-            <div className="flex justify-end">
+            {/* Toggle and Copy */}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  if (blogContent) {
+                    navigator.clipboard.writeText(blogContent)
+                    setCopied(true)
+                    setTimeout(() => setCopied(false), 2000)
+                  }
+                }}
+                className="text-sm text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors"
+                disabled={!blogContent}
+              >
+                {copied ? (
+                  <>
+                    <span className="text-green-400">✓</span>
+                    <span className="text-green-400">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <span>📋</span>
+                    Copy as Markdown
+                  </>
+                )}
+              </button>
               <button
                 onClick={toggleMarkdown}
                 className="text-sm text-slate-400 hover:text-white"
@@ -142,8 +166,24 @@ export default function PreviewView() {
                     )}
                   </div>
                 )}
-                <div className="prose prose-sm max-w-none text-gray-800">
-                  <ReactMarkdown>{blogBody || 'No blog content'}</ReactMarkdown>
+                <div className="text-gray-800 text-sm leading-relaxed">
+                  <ReactMarkdown
+                    components={{
+                      h1: ({ children }) => <h1 className="text-2xl font-bold text-gray-900 mt-6 mb-3">{children}</h1>,
+                      h2: ({ children }) => <h2 className="text-xl font-bold text-gray-900 mt-5 mb-2">{children}</h2>,
+                      h3: ({ children }) => <h3 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h3>,
+                      p: ({ children }) => <p className="mb-3 text-gray-700">{children}</p>,
+                      ul: ({ children }) => <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>,
+                      li: ({ children }) => <li className="text-gray-700">{children}</li>,
+                      strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      code: ({ children }) => <code className="bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-xs font-mono">{children}</code>,
+                      pre: ({ children }) => <pre className="bg-gray-100 text-gray-800 p-3 rounded-lg overflow-x-auto my-3 text-xs">{children}</pre>,
+                      blockquote: ({ children }) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-3">{children}</blockquote>,
+                      a: ({ href, children }) => <a href={href} className="text-blue-600 hover:underline">{children}</a>,
+                    }}
+                  >{blogBody || 'No blog content'}</ReactMarkdown>
                 </div>
               </div>
             )}
