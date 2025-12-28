@@ -1,17 +1,15 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-.venv
+# Dependencies
+node_modules/
+.pnpm-store/
 
-# Environment variables
+# Next.js
+.next/
+out/
+
+# Environment
 .env
 .env.local
+.env*.local
 
 # IDE
 .vscode/
@@ -26,14 +24,10 @@ Thumbs.db
 
 # Logs
 *.log
-logs/
+npm-debug.log*
 
-# Sensitive config (use environment variables instead)
-config.py
+# TypeScript
+*.tsbuildinfo
 
-# Temporary files
-*.tmp
-*.bak
-
-node_modules/
-**/node_modules/
+# Vercel
+.vercel
