@@ -70,7 +70,7 @@ interface Store {
 // Load history from localStorage
 function loadHistory(): HistoryItem[] {
   if (typeof window === 'undefined') return []
-  const stored = localStorage.getItem('agent-team-history')
+  const stored = localStorage.getItem('smm-agent-history')
   if (!stored) return []
   try {
     return JSON.parse(stored)
@@ -81,7 +81,7 @@ function loadHistory(): HistoryItem[] {
 
 // Save history to localStorage
 function saveHistory(history: HistoryItem[]) {
-  localStorage.setItem('agent-team-history', JSON.stringify(history))
+  localStorage.setItem('smm-agent-history', JSON.stringify(history))
 }
 
 export const useStore = create<Store>((set, get) => ({
@@ -166,7 +166,7 @@ export const useStore = create<Store>((set, get) => ({
     })
   },
   clearHistory: () => {
-    localStorage.removeItem('agent-team-history')
+    localStorage.removeItem('smm-agent-history')
     set({ history: [] })
   },
 

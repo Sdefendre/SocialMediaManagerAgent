@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 // Keys stored in localStorage
-const STORAGE_KEY = 'agent-team-settings'
+const STORAGE_KEY = 'smm-agent-settings'
 
 interface Settings {
   geminiApiKey: string

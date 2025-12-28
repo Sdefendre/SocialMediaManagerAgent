@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 // Get settings from localStorage
 function getSettings() {
   if (typeof window === 'undefined') return {}
-  const stored = localStorage.getItem('agent-team-settings')
+  const stored = localStorage.getItem('smm-agent-settings')
   if (!stored) return {}
   try {
     return JSON.parse(stored)
@@ -137,8 +137,8 @@ export default function CreateView() {
             <button
               onClick={() => togglePlatform('x')}
               className={`flex items-center justify-center gap-2 py-4 rounded-xl font-medium transition-all ${platforms.includes('x')
-                  ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-2 border-sky-500 text-white shadow-lg shadow-sky-500/20'
-                  : 'bg-slate-800/50 border-2 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-2 border-sky-500 text-white shadow-lg shadow-sky-500/20'
+                : 'bg-slate-800/50 border-2 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
                 }`}
             >
               <span className="text-lg">𝕏</span>
@@ -147,8 +147,8 @@ export default function CreateView() {
             <button
               onClick={() => togglePlatform('linkedin')}
               className={`flex items-center justify-center gap-2 py-4 rounded-xl font-medium transition-all ${platforms.includes('linkedin')
-                  ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-2 border-blue-500 text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-slate-800/50 border-2 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-2 border-blue-500 text-white shadow-lg shadow-blue-500/20'
+                : 'bg-slate-800/50 border-2 border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
                 }`}
             >
               <span className="text-lg">💼</span>
@@ -162,8 +162,8 @@ export default function CreateView() {
           onClick={handleGenerate}
           disabled={!canGenerate}
           className={`w-full py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 ${canGenerate
-              ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40'
-              : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+            ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40'
+            : 'bg-slate-800 text-slate-500 cursor-not-allowed'
             }`}
         >
           {isGenerating ? (

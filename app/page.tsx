@@ -44,9 +44,9 @@ export default function Home() {
             {/* Logo */}
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-                <span className="text-white text-sm font-bold">A</span>
+                <span className="text-white text-xs font-bold">SM</span>
               </div>
-              <span className="text-lg font-bold text-white hidden sm:block">Agent Team</span>
+              <span className="text-lg font-bold text-white hidden sm:block">Social Media Manager</span>
             </div>
 
             {/* Navigation */}
@@ -60,8 +60,8 @@ export default function Home() {
                     key={item.id}
                     onClick={() => setCurrentView(item.id as any)}
                     className={`relative px-3 py-2 sm:px-4 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${isActive
-                        ? 'bg-gradient-to-r from-violet-600/20 to-indigo-600/20 text-white border border-violet-500/30'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      ? 'bg-gradient-to-r from-violet-600/20 to-indigo-600/20 text-white border border-violet-500/30'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
                       }`}
                   >
                     <span className="text-base">{item.icon}</span>

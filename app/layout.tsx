@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Agent Team - Social Media Content Pipeline",
+  title: "Social Media Manager Agent",
   description: "Create and publish social media content with AI",
 };
 

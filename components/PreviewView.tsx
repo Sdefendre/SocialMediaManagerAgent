@@ -21,7 +21,7 @@ function parseBlogFrontmatter(content: string): { meta: Record<string, string>; 
 // Get settings from localStorage
 function getSettings() {
   if (typeof window === 'undefined') return {}
-  const stored = localStorage.getItem('agent-team-settings')
+  const stored = localStorage.getItem('smm-agent-settings')
   if (!stored) return {}
   try {
     return JSON.parse(stored)
@@ -325,8 +325,8 @@ export default function PreviewView() {
       {publishResult && (
         <div
           className={`mb-4 p-3 rounded-lg ${publishResult.success
-              ? 'bg-green-900/30 border border-green-800/50'
-              : 'bg-red-900/30 border border-red-800/50'
+            ? 'bg-green-900/30 border border-green-800/50'
+            : 'bg-red-900/30 border border-red-800/50'
             }`}
         >
           <span className={`text-sm ${publishResult.success ? 'text-green-300' : 'text-red-300'}`}>
@@ -342,8 +342,8 @@ export default function PreviewView() {
             key={tab.id}
             onClick={() => setPreviewTab(tab.id as any)}
             className={`flex-1 py-2 px-4 rounded text-sm font-medium ${previewTab === tab.id
-                ? 'bg-slate-800 text-white'
-                : 'text-slate-400 hover:text-white'
+              ? 'bg-slate-800 text-white'
+              : 'text-slate-400 hover:text-white'
               }`}
           >
             {tab.label}
