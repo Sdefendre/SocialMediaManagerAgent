@@ -129,9 +129,9 @@ function DroppableDay({ date, posts, onDelete, currentMonth }: DroppableDayProps
   return (
     <div
       ref={setNodeRef}
-      className={`h-full min-h-[80px] p-1.5 rounded-lg border transition-all ${
+      className={`relative w-full h-full min-h-[90px] p-1.5 rounded-lg border transition-all ${
         isOver
-          ? 'bg-violet-600/20 border-violet-400/60 shadow-xl shadow-violet-500/30 scale-[1.02]'
+          ? 'bg-violet-600/30 border-violet-400 shadow-xl shadow-violet-500/40'
           : isTodayDate
           ? 'bg-violet-500/10 border-violet-500/40 shadow-lg shadow-violet-500/20'
           : isCurrentMonth
@@ -322,7 +322,7 @@ export default function CalendarView() {
         <DndContext
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
-          collisionDetection={pointerWithin}
+          collisionDetection={rectIntersection}
         >
           <div className="flex-1 flex flex-col min-h-0">
             {/* Week day headers */}
@@ -335,7 +335,7 @@ export default function CalendarView() {
             </div>
 
             {/* Calendar days */}
-            <div className="grid grid-cols-7 gap-1 flex-1">
+            <div className="grid grid-cols-7 auto-rows-fr gap-1 flex-1">
               {calendarDays.map((day) => {
                 const dateKey = format(day, 'yyyy-MM-dd')
                 const dayPosts = postsByDate[dateKey] || []
