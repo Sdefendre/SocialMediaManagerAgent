@@ -82,6 +82,43 @@ function DraggablePost({ post, onDelete }: DraggablePostProps) {
   )
 }
 
+interface DraggableHistoryItemProps {
+  item: any
+}
+
+function DraggableHistoryItem({ item }: DraggableHistoryItemProps) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: `history-${item.id}`,
+    data: { historyItem: item }
+  })
+
+  const style = {
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: isDragging ? 'grabbing' : 'grab',
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-violet-500/40 text-left transition-all hover:scale-[1.02] ${isDragging ? 'z-50' : ''}`}
+    >
+      <div className="text-sm font-medium text-white mb-2 truncate">
+        {item.topic}
+      </div>
+      <div className="text-xs text-slate-400">
+        {format(new Date(item.createdAt), 'MMM d, yyyy')}
+      </div>
+      <div className="text-xs text-violet-400 mt-2">
+        Drag to calendar to schedule
+      </div>
+    </div>
+  )
+}
+
 interface DroppableDayProps {
   date: Date
   posts: any[]
@@ -175,12 +212,27 @@ export default function CalendarView() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
-    if (over && active.id !== over.id) {
-      const postId = active.id as string
+    if (over) {
+      const activeData = active.data.current
       const newDate = over.id as string
 
-      // Update the post's scheduled date
-      updateScheduledPost(postId, { scheduledDate: newDate })
+      // Check if dragging from history
+      if (activeData?.historyItem) {
+        // Create new scheduled post from history item
+        const newPost = {
+          id: `scheduled-${Date.now()}`,
+          topic: activeData.historyItem.topic,
+          scheduledDate: newDate,
+          status: 'draft' as const,
+          platforms: ['x' as const, 'linkedin' as const],
+          results: activeData.historyItem.results
+        }
+        addScheduledPost(newPost)
+      } else if (active.id !== over.id) {
+        // Moving existing scheduled post
+        const postId = active.id as string
+        updateScheduledPost(postId, { scheduledDate: newDate })
+      }
     }
 
     setActiveId(null)
@@ -300,22 +352,11 @@ export default function CalendarView() {
           <div className="mt-8 pt-8 border-t border-slate-700">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <span>📋</span>
-              Schedule from History
+              Drag from History to Schedule
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {history.slice(0, 6).map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleScheduleFromHistory(item)}
-                  className="p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-violet-500/40 text-left transition-all hover:scale-[1.02]"
-                >
-                  <div className="text-sm font-medium text-white mb-2 truncate">
-                    {item.topic}
-                  </div>
-                  <div className="text-xs text-slate-400">
-                    {format(new Date(item.createdAt), 'MMM d, yyyy')}
-                  </div>
-                </button>
+                <DraggableHistoryItem key={item.id} item={item} />
               ))}
             </div>
           </div>
