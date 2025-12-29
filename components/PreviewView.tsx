@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useStore } from '@/store/useStore'
+import XPreviewCard from '@/components/PlatformPreviews/XPreviewCard'
+import LinkedInPreviewCard from '@/components/PlatformPreviews/LinkedInPreviewCard'
 
 // Parse blog frontmatter
 function parseBlogFrontmatter(content: string): { meta: Record<string, string>; body: string } {
@@ -46,13 +48,23 @@ export default function PreviewView() {
     message: string
   } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [pendingPublish, setPendingPublish] = useState<'x' | 'linkedin' | 'blog' | null>(null)
 
   const blogContent = results?.blog || ''
   const xContent = results?.x || ''
   const linkedinContent = results?.linkedin || ''
   const imageUrl = results?.image || ''
 
+  const confirmPublish = (platform: 'x' | 'linkedin' | 'blog') => {
+    setPendingPublish(platform)
+    setShowConfirm(true)
+  }
+
   const handlePublish = async (platform: 'x' | 'linkedin' | 'blog') => {
+    setShowConfirm(false)
+    setPendingPublish(null)
+
     let content: string | undefined
     if (platform === 'x') content = xContent
     else if (platform === 'linkedin') content = linkedinContent
@@ -191,11 +203,20 @@ export default function PreviewView() {
             {blogContent && (
               <div className="flex justify-end">
                 <button
-                  onClick={() => handlePublish('blog')}
+                  onClick={() => confirmPublish('blog')}
                   disabled={isPublishing}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded text-white text-sm font-medium"
+                  className="px-6 py-3 bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 hover:from-violet-500 hover:via-indigo-500 hover:to-cyan-500 text-white shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40 active:scale-[0.98] transition-all duration-300 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isPublishing ? 'Publishing...' : 'Publish to Blog'}
+                  {isPublishing ? (
+                    <>
+                      <div className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      Publishing...
+                    </>
+                  ) : (
+                    <>
+                      📝 Publish to Blog
+                    </>
+                  )}
                 </button>
               </div>
             )}
@@ -223,22 +244,12 @@ export default function PreviewView() {
               </div>
             ) : (
               /* X/Twitter Preview */
-              <div className="bg-black rounded-xl p-4 max-w-md mx-auto">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
-                    U
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">Your Name</span>
-                      <span className="text-gray-500 text-sm">@yourhandle</span>
-                    </div>
-                    <div className="mt-2 text-white text-sm whitespace-pre-wrap">
-                      {xContent || 'No X content'}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <XPreviewCard
+                content={xContent || 'No X content'}
+                profileName="Your Name"
+                profileHandle="yourhandle"
+                timestamp="2h"
+              />
             )}
 
             <div className="flex items-center justify-between">
@@ -250,11 +261,20 @@ export default function PreviewView() {
               </span>
               {xContent && (
                 <button
-                  onClick={() => handlePublish('x')}
+                  onClick={() => confirmPublish('x')}
                   disabled={isPublishing}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded text-white text-sm font-medium"
+                  className="px-6 py-3 bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 hover:from-sky-500 hover:via-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-500/40 active:scale-[0.98] transition-all duration-300 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isPublishing ? 'Publishing...' : 'Publish to X'}
+                  {isPublishing ? (
+                    <>
+                      <div className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      Publishing...
+                    </>
+                  ) : (
+                    <>
+                      𝕏 Publish to X
+                    </>
+                  )}
                 </button>
               )}
             </div>
@@ -282,20 +302,12 @@ export default function PreviewView() {
               </div>
             ) : (
               /* LinkedIn Preview */
-              <div className="bg-white rounded-lg p-4 max-w-lg mx-auto">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold">
-                    U
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">Your Name</p>
-                    <p className="text-xs text-gray-500">Your Title • Just now</p>
-                  </div>
-                </div>
-                <div className="text-gray-800 text-sm whitespace-pre-wrap">
-                  {linkedinContent || 'No LinkedIn content'}
-                </div>
-              </div>
+              <LinkedInPreviewCard
+                content={linkedinContent || 'No LinkedIn content'}
+                profileName="Your Name"
+                profileTitle="Your Professional Title"
+                timestamp="2h"
+              />
             )}
 
             <div className="flex items-center justify-between">
@@ -307,11 +319,20 @@ export default function PreviewView() {
               </span>
               {linkedinContent && (
                 <button
-                  onClick={() => handlePublish('linkedin')}
+                  onClick={() => confirmPublish('linkedin')}
                   disabled={isPublishing}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded text-white text-sm font-medium"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 hover:from-blue-600 hover:via-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 active:scale-[0.98] transition-all duration-300 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isPublishing ? 'Publishing...' : 'Publish to LinkedIn'}
+                  {isPublishing ? (
+                    <>
+                      <div className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      Publishing...
+                    </>
+                  ) : (
+                    <>
+                      💼 Publish to LinkedIn
+                    </>
+                  )}
                 </button>
               )}
             </div>
@@ -403,6 +424,45 @@ export default function PreviewView() {
       >
         Create New
       </button>
+
+      {/* Confirmation Modal */}
+      {showConfirm && pendingPublish && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-gradient-to-br from-red-900/90 to-red-800/90 border-2 border-red-500 rounded-2xl p-8 max-w-md mx-4 shadow-2xl shadow-red-500/50 animate-slide-up">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">⚠️</span>
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">Confirm Publishing</h2>
+              <p className="text-red-100">
+                Are you sure you want to publish this content to{' '}
+                <span className="font-bold">
+                  {pendingPublish === 'x' ? 'X (Twitter)' : pendingPublish === 'linkedin' ? 'LinkedIn' : 'Blog'}
+                </span>
+                ?
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowConfirm(false)
+                  setPendingPublish(null)
+                }}
+                className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => pendingPublish && handlePublish(pendingPublish)}
+                className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-500/30"
+              >
+                Yes, Publish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

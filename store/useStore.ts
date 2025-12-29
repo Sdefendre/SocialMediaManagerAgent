@@ -20,6 +20,22 @@ interface HistoryItem {
   results: Results
 }
 
+interface ScheduledPost {
+  id: string
+  topic: string
+  scheduledDate: string
+  status: 'draft' | 'scheduled' | 'published'
+  platforms: ('x' | 'linkedin' | 'blog')[]
+  results?: Results
+}
+
+interface UserProfile {
+  name: string
+  title: string
+  handle: string
+  image?: string
+}
+
 interface Store {
   // View state
   currentView: 'create' | 'progress' | 'preview' | 'settings' | 'history'
@@ -119,7 +135,7 @@ export const useStore = create<Store>((set, get) => ({
   updateStep: (step, status) =>
     set((state) => {
       const newStatuses = { ...state.stepStatuses, [step]: status }
-      const steps = ['blog', 'x', 'linkedin', 'image']
+      const steps = ['research', 'blog', 'x', 'linkedin', 'image']
       const completed = steps.filter((s) => newStatuses[s] === 'complete').length
       return {
         stepStatuses: newStatuses,

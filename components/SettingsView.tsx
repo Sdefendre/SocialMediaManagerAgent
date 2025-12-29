@@ -6,7 +6,9 @@ import { useState, useEffect } from 'react'
 const STORAGE_KEY = 'smm-agent-settings'
 
 interface Settings {
-  geminiApiKey: string
+  anthropicApiKey: string
+  googleApiKey: string
+  braveSearchApiKey: string
   typefullyApiKey: string
   typefullySocialSetId: string
   blogApiKey: string
@@ -14,7 +16,9 @@ interface Settings {
 }
 
 const defaultSettings: Settings = {
-  geminiApiKey: '',
+  anthropicApiKey: '',
+  googleApiKey: '',
+  braveSearchApiKey: '',
   typefullyApiKey: '',
   typefullySocialSetId: '273516',
   blogApiKey: '',
@@ -47,7 +51,7 @@ export default function SettingsView() {
     const localSettings = getSettings()
 
     // If localStorage has values, use them
-    if (localSettings.geminiApiKey) {
+    if (localSettings.anthropicApiKey) {
       setSettings(localSettings)
       setLoading(false)
       return
@@ -64,8 +68,14 @@ export default function SettingsView() {
           ...localSettings,
         }
         // Only use env values if localStorage is empty
-        if (!localSettings.geminiApiKey && envSettings.geminiApiKey) {
-          merged.geminiApiKey = envSettings.geminiApiKey
+        if (!localSettings.anthropicApiKey && envSettings.anthropicApiKey) {
+          merged.anthropicApiKey = envSettings.anthropicApiKey
+        }
+        if (!localSettings.googleApiKey && envSettings.googleApiKey) {
+          merged.googleApiKey = envSettings.googleApiKey
+        }
+        if (!localSettings.braveSearchApiKey && envSettings.braveSearchApiKey) {
+          merged.braveSearchApiKey = envSettings.braveSearchApiKey
         }
         if (!localSettings.typefullyApiKey && envSettings.typefullyApiKey) {
           merged.typefullyApiKey = envSettings.typefullyApiKey
@@ -117,15 +127,39 @@ export default function SettingsView() {
           <div className="text-center py-8 text-slate-400">Loading...</div>
         ) : (
           <div className="space-y-5">
-            {/* Gemini API Key */}
+            {/* Anthropic API Key */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Gemini API Key <span className="text-red-400">*</span>
+                Anthropic API Key (Claude) <span className="text-red-400">*</span>
               </label>
               <input
                 type={showKeys ? 'text' : 'password'}
-                value={settings.geminiApiKey}
-                onChange={(e) => handleChange('geminiApiKey', e.target.value)}
+                value={settings.anthropicApiKey}
+                onChange={(e) => handleChange('anthropicApiKey', e.target.value)}
+                placeholder="sk-ant-api..."
+                className={inputClass}
+              />
+              <p className="text-xs text-slate-500 mt-2">
+                Get from{' '}
+                <a
+                  href="https://console.anthropic.com/settings/keys"
+                  target="_blank"
+                  className="text-violet-400 hover:underline"
+                >
+                  Anthropic Console →
+                </a>
+              </p>
+            </div>
+
+            {/* Google API Key */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Google API Key (Image Generation) <span className="text-red-400">*</span>
+              </label>
+              <input
+                type={showKeys ? 'text' : 'password'}
+                value={settings.googleApiKey}
+                onChange={(e) => handleChange('googleApiKey', e.target.value)}
                 placeholder="AIza..."
                 className={inputClass}
               />
@@ -137,6 +171,30 @@ export default function SettingsView() {
                   className="text-violet-400 hover:underline"
                 >
                   Google AI Studio →
+                </a>
+              </p>
+            </div>
+
+            {/* Brave Search API Key */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Brave Search API Key (Research) <span className="text-red-400">*</span>
+              </label>
+              <input
+                type={showKeys ? 'text' : 'password'}
+                value={settings.braveSearchApiKey}
+                onChange={(e) => handleChange('braveSearchApiKey', e.target.value)}
+                placeholder="BSA..."
+                className={inputClass}
+              />
+              <p className="text-xs text-slate-500 mt-2">
+                Get from{' '}
+                <a
+                  href="https://brave.com/search/api/"
+                  target="_blank"
+                  className="text-violet-400 hover:underline"
+                >
+                  Brave Search API →
                 </a>
               </p>
             </div>

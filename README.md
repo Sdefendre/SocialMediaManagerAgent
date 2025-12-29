@@ -1,9 +1,9 @@
 # Social Media Manager Agent
 
-A modern web app that generates social media content from any topic using AI. Built with Next.js 16 and powered by Google Gemini.
+A modern web app that generates social media content from any topic using AI. Built with Next.js 16 and powered by Claude Opus 4.5.
 
-**Input:** A topic  
-**Output:** Blog post + X post + LinkedIn post + Stock image
+**Input:** A topic
+**Output:** Blog post + X post + LinkedIn post + AI-generated hero image
 
 ## Quick Start
 
@@ -17,23 +17,29 @@ Open [http://localhost:3000](http://localhost:3000)
 ## Setup
 
 1. Go to **Settings** in the app
-2. Add your **Gemini API Key** (required)
-3. Optionally add Typefully API key for X/LinkedIn publishing
-4. Optionally add Blog API key for blog publishing
+2. Add your **Anthropic API Key** (required for Claude)
+3. Add your **Google API Key** (required for image generation)
+4. Add your **Brave Search API Key** (required for research)
+5. Optionally add Typefully API key for X/LinkedIn publishing
+6. Optionally add Blog API key for blog publishing
 
 ### Getting API Keys
 
 | Service | Purpose | Get It |
 |---------|---------|--------|
-| Gemini | AI content generation | [Google AI Studio](https://aistudio.google.com/app/apikey) |
+| Anthropic (Claude) | AI content generation | [Anthropic Console](https://console.anthropic.com/settings/keys) |
+| Google (Imagen) | AI image generation | [Google AI Studio](https://aistudio.google.com/app/apikey) |
+| Brave Search | Web research for accuracy | [Brave Search API](https://brave.com/search/api/) |
 | Typefully | X & LinkedIn publishing | [Typefully Settings](https://typefully.com/settings) |
 | Blog API | Blog publishing | Your blog's admin panel |
 
 ## Features
 
 ### Content Generation
-- **AI-Powered Content**: Uses Gemini to create optimized blog posts, X posts, and LinkedIn posts
-- **Stock Images**: Automatically fetches relevant images from free stock photo APIs
+- **AI-Powered Content**: Uses Claude Opus 4.5 to create optimized blog posts, X posts, and LinkedIn posts
+- **AI Image Generation**: Google Imagen (Nano Banana Pro) creates professional, contextual hero images for every post
+- **Web Research**: Brave Search API integration ensures content accuracy with real-time research before writing
+- **Topic Suggestions**: Claude recommends relevant, cutting-edge topics based on DefendreSolutions.com's focus areas and latest AI trends
 - **Real-time Progress**: Live SSE streaming shows generation progress for each content type
 
 ### Content Preview
@@ -44,9 +50,10 @@ Open [http://localhost:3000](http://localhost:3000)
 - **Blog Frontmatter Parsing**: Automatic extraction and display of title, description, and tags
 
 ### Publishing
-- **X (Twitter)**: Publish directly via Typefully API
-- **LinkedIn**: Publish directly via Typefully API
+- **X (Twitter)**: Publish directly via Typefully API (includes DefendreSolutions.com CTA)
+- **LinkedIn**: Publish directly via Typefully API (includes DefendreSolutions.com CTA)
 - **Blog**: Publish to your custom blog endpoint
+- **Safety Confirmation**: Red confirmation modal prevents accidental publishing
 
 ### History & Persistence
 - **Post History**: View and reload up to 50 previous generations
@@ -57,6 +64,9 @@ Open [http://localhost:3000](http://localhost:3000)
 - **Mobile Responsive**: Optimized layouts for all device sizes
 - **Real-time Validation**: API key warnings and error handling
 - **Premium Dark UI**: Modern glassmorphism design with gradient accents
+- **Animated Backgrounds**: Pulsing gradient orbs and subtle grid overlays
+- **Gradient Buttons**: Beautiful platform-specific gradient buttons with hover effects
+- **Changelog Page**: Track all updates and improvements at `/changelog`
 
 ## Project Structure
 
@@ -65,17 +75,23 @@ Open [http://localhost:3000](http://localhost:3000)
 │   ├── page.tsx              # Main page with view routing
 │   ├── layout.tsx            # Root layout with metadata
 │   ├── globals.css           # Global styles
+│   ├── changelog/
+│   │   └── page.tsx          # Changelog page
 │   └── api/
-│       ├── generate-content/ # AI content generation (SSE)
+│       ├── generate-content/ # AI content generation with research (SSE)
+│       ├── suggest-topics/   # AI-powered topic suggestions
 │       ├── publish/          # X & LinkedIn publishing
 │       ├── publish-blog/     # Blog publishing
 │       └── settings/         # Environment variable fallbacks
 ├── components/
-│   ├── CreateView.tsx        # Topic input & platform selection
+│   ├── CreateView.tsx        # Topic input, platform selection, topic suggestions
 │   ├── ProgressView.tsx      # Real-time generation progress
 │   ├── PreviewView.tsx       # Tabbed content preview & publishing
 │   ├── HistoryView.tsx       # Post history management
-│   └── SettingsView.tsx      # API key configuration
+│   ├── SettingsView.tsx      # API key configuration
+│   └── PlatformPreviews/
+│       ├── XPreviewCard.tsx       # Pixel-perfect X/Twitter preview
+│       └── LinkedInPreviewCard.tsx # Pixel-perfect LinkedIn preview
 ├── store/
 │   └── useStore.ts           # Zustand global state
 ├── lib/
@@ -92,7 +108,9 @@ Open [http://localhost:3000](http://localhost:3000)
 | Tailwind CSS | 4.x | Utility-first styling |
 | Zustand | 5.0.9 | Lightweight state management |
 | react-markdown | 10.1.0 | Markdown rendering |
-| Google Gemini | Latest | AI content generation |
+| Claude Opus 4.5 | Latest | AI content generation |
+| Google Imagen | Latest | AI image generation (Nano Banana Pro) |
+| Brave Search API | - | Web research for accuracy |
 | Typefully API | - | Social media publishing |
 
 ## Environment Variables
@@ -100,8 +118,14 @@ Open [http://localhost:3000](http://localhost:3000)
 Create a `.env.local` file for server-side API keys (optional, can use Settings UI instead):
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key
+# Required for content generation
+ANTHROPIC_API_KEY=your_anthropic_api_key
+GOOGLE_API_KEY=your_google_api_key
+BRAVE_SEARCH_API_KEY=your_brave_search_api_key
+
+# Optional for publishing
 TYPEFULLY_API_KEY=your_typefully_api_key
+TYPEFULLY_SOCIAL_SET_ID=your_social_set_id
 BLOG_API_KEY=your_blog_api_key
 BLOG_API_URL=https://your-blog.com/api
 ```

@@ -3,10 +3,11 @@
 import { useStore } from '@/store/useStore'
 
 const STEPS = [
+  { id: 'research', label: 'Researching Topic', icon: '🔍' },
   { id: 'blog', label: 'Writing Blog Post', icon: '📝' },
   { id: 'x', label: 'Creating X Post', icon: '𝕏' },
   { id: 'linkedin', label: 'Creating LinkedIn Post', icon: '💼' },
-  { id: 'image', label: 'Fetching Image', icon: '🖼️' },
+  { id: 'image', label: 'Generating Image', icon: '🖼️' },
 ]
 
 export default function ProgressView() {
@@ -17,11 +18,18 @@ export default function ProgressView() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto animate-slide-up">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="relative inline-flex items-center justify-center w-24 h-24 mb-4">
           <svg className="w-24 h-24 transform -rotate-90">
+            <defs>
+              <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#8b5cf6" />
+                <stop offset="50%" stopColor="#6366f1" />
+                <stop offset="100%" stopColor="#06b6d4" />
+              </linearGradient>
+            </defs>
             <circle
               cx="48"
               cy="48"
@@ -34,12 +42,12 @@ export default function ProgressView() {
               cx="48"
               cy="48"
               r="40"
-              className="stroke-violet-500"
+              stroke="url(#progress-gradient)"
               strokeWidth="8"
               fill="none"
               strokeLinecap="round"
               strokeDasharray={`${progress * 2.51} 251`}
-              style={{ transition: 'stroke-dasharray 0.5s ease' }}
+              className="transition-all duration-500 ease-out"
             />
           </svg>
           <span className="absolute text-2xl font-bold text-white">{progress}%</span>
@@ -51,14 +59,15 @@ export default function ProgressView() {
       </div>
 
       {/* Steps */}
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-4 sm:p-6 mb-6">
+      <div className="card-glass p-4 sm:p-6 mb-6">
         <div className="space-y-3">
           {STEPS.map((step, index) => {
             const status = getStepStatus(step.id)
             return (
               <div
                 key={step.id}
-                className={`flex items-center gap-4 p-4 rounded-xl transition-all ${status === 'in_progress'
+                style={{ animationDelay: `${index * 100}ms` }}
+                className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300 animate-slide-up ${status === 'in_progress'
                     ? 'bg-violet-500/10 border border-violet-500/30'
                     : status === 'complete'
                       ? 'bg-emerald-500/10 border border-emerald-500/20'
@@ -123,7 +132,7 @@ export default function ProgressView() {
       {/* Cancel Button */}
       <button
         onClick={reset}
-        className="w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-300 font-medium transition-colors"
+        className="btn-secondary w-full py-3"
       >
         Cancel
       </button>

@@ -1,8 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
+  /* Base colors */
+  --background: #0a0a0f;
+  --background-elevated: #0f1117;
+  --foreground: #f8fafc;
+
+  /* Vibrant gradient spectrum */
+  --gradient-start: #8b5cf6;  /* violet-500 */
+  --gradient-mid: #6366f1;    /* indigo-500 */
+  --gradient-end: #06b6d4;    /* cyan-500 */
+
+  /* Accent colors */
+  --accent-violet: #8b5cf6;
+  --accent-indigo: #6366f1;
+  --accent-cyan: #06b6d4;
+  --accent-pink: #ec4899;
+
+  /* Glass morphism */
+  --glass-bg: rgba(15, 17, 23, 0.8);
+  --glass-border: rgba(139, 92, 246, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.05);
+
+  /* Enhanced shadows with glow */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(139 92 246 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(139 92 246 / 0.2);
+  --shadow-xl: 0 20px 25px -5px rgb(139 92 246 / 0.3);
+  --shadow-glow: 0 0 20px rgb(139 92 246 / 0.4);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Spacing scale */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
 }
 
 body {
@@ -11,7 +48,82 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* Card styles */
+/* ===== Button Variants ===== */
+
+/* Primary Button - Vibrant gradient */
+.btn-primary {
+  @apply px-4 py-2 rounded-xl font-medium transition-all duration-250;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600;
+  @apply hover:from-violet-500 hover:via-indigo-500 hover:to-cyan-500;
+  @apply text-white shadow-lg shadow-violet-500/30;
+  @apply hover:shadow-xl hover:shadow-violet-500/40;
+  @apply active:scale-[0.98];
+}
+
+/* Secondary Button - Glass style */
+.btn-secondary {
+  @apply px-4 py-2 rounded-xl font-medium transition-all duration-250;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply bg-slate-800/50 border border-slate-700;
+  @apply hover:bg-slate-700/50 hover:border-violet-500/30;
+  @apply text-slate-300 hover:text-white backdrop-blur-lg;
+}
+
+/* Ghost Button - Minimal */
+.btn-ghost {
+  @apply px-4 py-2 rounded-xl font-medium transition-all duration-250;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply bg-transparent;
+  @apply hover:bg-slate-800/50 text-slate-400 hover:text-white;
+}
+
+/* Danger Button */
+.btn-danger {
+  @apply px-4 py-2 rounded-xl font-medium transition-all duration-250;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply bg-red-600 hover:bg-red-500;
+  @apply text-white shadow-lg shadow-red-500/30;
+}
+
+/* ===== Card Variants ===== */
+
+/* Glass Card - Primary style */
+.card-glass {
+  @apply rounded-2xl border backdrop-blur-xl;
+  @apply shadow-lg transition-all duration-300;
+  @apply bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-800/80;
+  @apply border-slate-700/50;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Interactive Card - Hover effects */
+.card-interactive {
+  @apply rounded-2xl border backdrop-blur-xl;
+  @apply shadow-lg transition-all duration-300;
+  @apply bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-800/80;
+  @apply border-slate-700/50;
+  @apply cursor-pointer;
+  @apply hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/20;
+  @apply hover:translate-y-[-2px];
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Elevated Card - Higher contrast */
+.card-elevated {
+  @apply rounded-2xl border backdrop-blur-xl;
+  @apply shadow-lg transition-all duration-300;
+  @apply bg-gradient-to-br from-slate-800 to-slate-900;
+  @apply border-slate-600 shadow-xl shadow-black/20;
+}
+
+/* Legacy Card - For backwards compatibility */
 .card {
   background-color: rgba(15, 23, 42, 0.8);
   border-radius: 1rem;
@@ -22,7 +134,87 @@ body {
               inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Custom scrollbar */
+/* ===== Animations ===== */
+
+/* Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Slide Up */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide In From Right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow Pulse */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.4); }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Shimmer effect for loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(139, 92, 246, 0.3) 50%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Scale on Hover */
+.hover-scale {
+  @apply transition-transform duration-200;
+}
+.hover-scale:hover {
+  @apply scale-[1.02];
+}
+
+/* ===== Custom Scrollbar ===== */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -34,10 +226,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3b82f6, #6366f1);
+  background: linear-gradient(to bottom, #8b5cf6, #6366f1);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #60a5fa, #818cf8);
+  background: linear-gradient(to bottom, #a78bfa, #818cf8);
 }
