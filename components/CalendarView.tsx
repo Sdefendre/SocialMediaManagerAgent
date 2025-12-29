@@ -2,7 +2,7 @@
 
 import { useStore } from '@/store/useStore'
 import { useState, useMemo } from 'react'
-import { DndContext, DragEndEvent, DragStartEvent, useDraggable, useDroppable } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, DragStartEvent, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import {
   format,
@@ -174,6 +174,7 @@ export default function CalendarView() {
   const { scheduledPosts, updateScheduledPost, deleteScheduledPost, history, addScheduledPost } = useStore()
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [activeItem, setActiveItem] = useState<any>(null)
 
   // Get calendar days (including padding days from prev/next month)
   const calendarDays = useMemo(() => {
@@ -197,6 +198,15 @@ export default function CalendarView() {
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string)
+    const activeData = event.active.data.current
+
+    // Set active item for ghost preview
+    if (activeData?.historyItem) {
+      setActiveItem({ type: 'history', data: activeData.historyItem })
+    } else {
+      const post = scheduledPosts.find(p => p.id === event.active.id)
+      if (post) setActiveItem({ type: 'post', data: post })
+    }
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -226,6 +236,7 @@ export default function CalendarView() {
     }
 
     setActiveId(null)
+    setActiveItem(null)
   }
 
   const handleScheduleFromHistory = (item: any) => {
@@ -355,6 +366,33 @@ export default function CalendarView() {
               </div>
             </div>
           )}
+
+          {/* Drag Overlay - Ghost Preview */}
+          <DragOverlay dropAnimation={null}>
+            {activeItem && (
+              <div className="opacity-90 rotate-3 scale-105">
+                {activeItem.type === 'post' ? (
+                  <div className="p-1.5 rounded border border-violet-400 bg-violet-500/20 text-[10px] shadow-xl shadow-violet-500/50">
+                    <div className="flex items-center gap-0.5">
+                      <span className="text-xs">
+                        {activeItem.data.status === 'draft' ? '📝' : activeItem.data.status === 'scheduled' ? '⏰' : '✅'}
+                      </span>
+                      <span className="text-white font-medium truncate text-[10px]">{activeItem.data.topic}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-48 p-3 rounded-lg bg-violet-500/20 border border-violet-400 shadow-xl shadow-violet-500/50">
+                    <div className="text-xs font-medium text-white mb-1 truncate">
+                      {activeItem.data.topic}
+                    </div>
+                    <div className="text-[10px] text-slate-300">
+                      {format(new Date(activeItem.data.createdAt), 'MMM d')}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </DragOverlay>
         </DndContext>
       </div>
     </div>

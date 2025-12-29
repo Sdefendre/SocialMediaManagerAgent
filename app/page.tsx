@@ -103,19 +103,9 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900/50 border-t border-slate-800 py-6 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-4">
-            <a
-              href="/changelog"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 hover:border-violet-500/60 rounded-xl text-sm text-violet-300 hover:text-violet-200 transition-all duration-200 hover:scale-[1.02]"
-            >
-              <span className="text-base">📋</span>
-              <span>View Changelog</span>
-            </a>
-          </div>
-
-          <p className="text-xs text-slate-500">
+      <footer className="bg-slate-900/50 border-t border-slate-800 py-3 px-4">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs text-slate-500 text-center">
             Built by{' '}
             <a
               href="https://defendresolutions.com"
@@ -124,6 +114,13 @@ export default function Home() {
               className="text-violet-400 hover:text-violet-300 hover:underline transition-colors"
             >
               DefendreSolutions.com
+            </a>
+            <span className="mx-2">•</span>
+            <a
+              href="/changelog"
+              className="text-violet-400 hover:text-violet-300 hover:underline transition-colors"
+            >
+              Changelog
             </a>
             <span className="mx-2">•</span>
             <span className="text-slate-600">Powered by Claude Opus 4.5 & Google Imagen</span>
