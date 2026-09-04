@@ -1,28 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-/**
- * Parse blog post frontmatter
- */
-function parseBlogFrontmatter(content: string): {
-  meta: Record<string, string>
-  body: string
-} {
-  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-
-  if (!frontmatterMatch) {
-    return { meta: {}, body: content }
-  }
-
-  const meta: Record<string, string> = {}
-  frontmatterMatch[1].split('\n').forEach(line => {
-    const [key, ...valueParts] = line.split(':')
-    if (key && valueParts.length) {
-      meta[key.trim()] = valueParts.join(':').trim().replace(/^["']|["']$/g, '')
-    }
-  })
-
-  return { meta, body: frontmatterMatch[2] }
-}
+import { parseBlogFrontmatter } from '@/lib/utils'
 
 /**
  * POST /api/publish-blog
