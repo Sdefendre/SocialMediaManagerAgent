@@ -3,22 +3,9 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useStore } from '@/store/useStore'
+import { parseBlogFrontmatter } from '@/lib/utils'
 import XPreviewCard from '@/components/PlatformPreviews/XPreviewCard'
 import LinkedInPreviewCard from '@/components/PlatformPreviews/LinkedInPreviewCard'
-
-// Parse blog frontmatter
-function parseBlogFrontmatter(content: string): { meta: Record<string, string>; body: string } {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-  if (!match) return { meta: {}, body: content }
-  const meta: Record<string, string> = {}
-  match[1].split('\n').forEach((line) => {
-    const [key, ...vals] = line.split(':')
-    if (key && vals.length) {
-      meta[key.trim()] = vals.join(':').trim().replace(/^["']|["']$/g, '')
-    }
-  })
-  return { meta, body: match[2] }
-}
 
 // Get settings from localStorage
 function getSettings() {
